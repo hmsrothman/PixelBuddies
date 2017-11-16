@@ -1,0 +1,16 @@
+import static org.lwjgl.glfw.GLFW.*;
+
+public class Window {
+	private long id = 0;
+	
+	public Window(String name, int width, int height, long flags){
+		id = glfwCreateWindow(width, height, name, 0, 0);
+		if(id == 0){
+			System.err.println("window creation failed");
+		}
+		
+		glfwSetWindowPos(id,0,0);
+		glfwMakeContextCurrent(id);
+		glfwShowWindow(id);
+	}
+}

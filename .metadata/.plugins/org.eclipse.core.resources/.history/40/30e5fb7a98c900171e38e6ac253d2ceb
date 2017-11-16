@@ -1,0 +1,7 @@
+import static org.lwjgl.glfw.GLFW.*
+
+public class Window {
+	public void create(String name, int width, int height, long flags){
+		window = glfwCreateWindow(width, height, 0, 0)
+	}
+}

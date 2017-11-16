@@ -1,0 +1,27 @@
+
+public abstract class MainGame {
+	private Window window = null;
+	private boolean running = true;
+	
+	public MainGame(){
+		init();
+		gameLoop();
+	}
+	
+	private void init(){
+		Engine.init();
+		window = new Window("Game", 1920,1080);
+		
+		onInit();
+	}
+	
+	protected abstract void onInit();
+	
+	private void gameLoop(){
+		while(running){
+			processInput();
+			update();
+			draw();
+		}
+	}
+}

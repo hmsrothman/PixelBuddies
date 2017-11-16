@@ -1,0 +1,10 @@
+import static org.lwjgl.glfw.GLFW.*;
+
+public abstract class Engine {
+	public static void init(){
+		if(!glfwInit()){
+			System.err.println("GLFW FAILED TO INIT");
+		}
+		glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+	}
+}

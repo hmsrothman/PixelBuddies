@@ -1,0 +1,13 @@
+
+public abstract class MainGame {
+	private Window window;
+	
+	public MainGame(){
+		init();
+		
+	}
+	
+	private void init(){
+		Engine.init();
+	}
+}

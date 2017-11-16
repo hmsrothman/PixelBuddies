@@ -1,0 +1,11 @@
+
+public abstract class MainGame {
+	public MainGame(){
+		init();
+		
+	}
+	
+	private void init(){
+		Engine.init();
+	}
+}

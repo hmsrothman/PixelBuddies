@@ -1,0 +1,10 @@
+
+public class Camera2D {
+	public Camera2D(){
+		
+	}
+	
+	private void init(int screenWidth, int screenHeight){
+	
+	}
+}

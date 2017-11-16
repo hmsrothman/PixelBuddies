@@ -1,0 +1,36 @@
+
+public abstract class MainGame {
+	private Window window = null;
+	private boolean running = true;
+	
+	public MainGame(){
+		init();
+		gameLoop();
+	}
+	
+	private void init(){
+		Engine.initGLFW();
+		window = new Window("Game", 1920,1080);
+		
+		onInit();
+	}
+		
+	private void gameLoop(){
+		while(running){
+			processInput();
+			update();
+			draw();
+			window.swapBuffers();
+		}
+	}
+	
+	private void processInput(){
+		
+	}
+	
+	protected abstract void onInit();
+	
+	protected abstract void update();
+	
+	protected abstract void draw();
+}

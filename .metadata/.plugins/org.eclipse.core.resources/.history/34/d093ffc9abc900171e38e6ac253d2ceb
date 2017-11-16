@@ -1,0 +1,27 @@
+import vector.Vector2f;
+
+public class Camera2D {
+	public Camera2D(){
+		
+	}
+	
+	private void init(int screenWidth, int screenHeight){
+		
+	}
+	
+	public void setPosition(Vector2f position){
+		
+	}
+	
+	public void setScale(float scale){
+		
+	}
+	
+	Vector2f getPosition(){
+		return pos;
+	}
+	
+	float getScale(){
+		return scale;
+	}
+}

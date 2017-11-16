@@ -1,0 +1,90 @@
+import vector.Vector4f;
+import static org.lwjgl.opengl.GL.*;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.*;
+import static org.lwjgl.opengl.GL14.*;
+import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL31.*;
+import static org.lwjgl.opengl.GL32.*;
+import static org.lwjgl.opengl.GL33.*;
+import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL33.*;
+import static org.lwjgl.opengl.GL33.*;
+import static org.lwjgl.opengl.GL33.*;
+
+public class Game extends MainGame {
+	Texture tracy1;
+	Texture tracy2;
+	Texture tracy3;
+	SpriteBatch batch;
+	GLSLProgram shader;
+	
+	int i=0;
+	int j=0;
+	
+	@Override
+	protected void onInit() {
+		tracy1 = new Texture("C:\\Users\\Simon\\Code\\Java\\Game\\Tracy\\Tracy1.png");
+		tracy2 = new Texture("C:\\Users\\Simon\\Code\\Java\\Game\\Tracy\\Tracy2.png");
+		tracy3 = new Texture("C:\\Users\\Simon\\Code\\Java\\Game\\Tracy\\Tracy3.png");
+		batch = new SpriteBatch();
+		batch.init();
+	}
+
+	@Override
+	protected void initShaders() {
+		shader = new GLSLProgram("C:\\Users\\Simon\\Code\\Java\\Game\\src\\shaders\\simple.vert",
+				"C:\\Users\\Simon\\Code\\Java\\Game\\src\\shaders\\simple.frag");
+	}
+
+	@Override
+	protected void update() {
+
+	}
+
+	@Override
+	protected void draw() {
+		
+		glClearDepth(1.0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
+		glActiveTexture(GL_TEXTURE0);
+		
+		int textureLocation = shader.getUniformLocation("sampler");
+		glUniform1i(textureLocation, 0);
+		
+		shader.use();
+		batch.begin();
+		
+		float scale = 1f;
+		
+		for(float x = -1; x<1;x+=1080/1920f * tracy1.width / (float)tracy1.height * scale){
+			for(float y = -1; y<1; y+=1*scale){
+				Vector4f destRect = new Vector4f(x,y,1080/1920f * tracy1.width / (float)tracy1.height*scale,1*scale);
+				Vector4f uvRect = new Vector4f(0,0,1,1);
+				int texture = 0;
+				if(i%2==0){
+					texture = tracy3.id;
+				} else if(i%4==1){
+					texture = tracy2.id;
+				} else if(i%4==3){
+					texture = tracy1.id;
+				}
+				float depth = 0;
+				Vector4f color = new Vector4f(1,1,1,1);
+				batch.draw(destRect, uvRect, texture, depth, color);
+			}
+		}
+		batch.end();
+		batch.renderBatch();
+		shader.unuse();
+		if(j++==50){
+			i++;
+			j=0;
+		}
+		if(i++==4){
+			i=0;
+		}
+	}
+}
