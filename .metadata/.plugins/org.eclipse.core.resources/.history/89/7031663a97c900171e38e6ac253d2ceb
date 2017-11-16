@@ -1,9 +1,0 @@
-import org.lwjgl.glfw.*;
-
-public abstract class Engine {
-	public static void init(){
-		if(!GLFW.glfwInit()){
-			
-		}
-	}
-}
