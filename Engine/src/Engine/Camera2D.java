@@ -8,13 +8,13 @@ public class Camera2D {
 	private int screenWidth, screenHeight;
 	private boolean needsUpdate;
 	private float scale;
-	private Vector2f pos;
+	public Vector2f pos;
 	private Matrix4f cameraMat;
 	private Matrix4f orthoMat;
 
 	public Camera2D(int screenWidth, int screenHeight) {
 		pos = new Vector2f(0, 0);
-		scale = 0.1f;
+		scale = 1f;
 		cameraMat = new Matrix4f();
 		needsUpdate = true;
 		orthoMat = new Matrix4f();
@@ -24,7 +24,7 @@ public class Camera2D {
 	private void init(int screenWidth, int screenHeight) {
 		this.screenWidth = screenWidth;
 		this.screenHeight = screenHeight;
-		orthoMat = MathUtil.toOrtho2D(orthoMat, 0.0f, 0.0f, screenWidth/scale, screenHeight/scale);
+		orthoMat = MathUtil.toOrtho2D(orthoMat, 0.0f, 0.0f, screenWidth/scale, -screenHeight/scale);
 		cameraMat = orthoMat.translate(new Vector3f(-pos.x,-pos.y,0));
 		needsUpdate = false;
 	}
@@ -34,7 +34,7 @@ public class Camera2D {
 			System.out.println("UPDATING CAMERA");
 			Vector3f translate = new Vector3f(-pos.x, -pos.y, 0);
 
-			orthoMat = MathUtil.toOrtho2D(orthoMat, 0.0f, 0.0f, screenWidth/scale, screenHeight/scale);
+			orthoMat = MathUtil.toOrtho2D(orthoMat, 0.0f, 0.0f, screenWidth/scale, -screenHeight/scale);
 
 			cameraMat = Matrix4f.translate(translate, orthoMat, cameraMat); // TRANSLATE
 

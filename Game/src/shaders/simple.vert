@@ -14,6 +14,6 @@ void main(){
 	gl_Position.xy = (cameraMat*vec4(pos,0,1)).xy;
 	gl_Position.z = 0;
 	gl_Position.w = 1;
-	fragColor = vec4(cameraMat[0][0],1,1,1);
-	fragUV = vec2(uv.x,uv.y);
+	fragColor = color;
+	fragUV = vec2(uv.x,1-uv.y);
 }

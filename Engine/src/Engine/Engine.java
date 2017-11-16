@@ -46,7 +46,7 @@ public abstract class Engine {
 		System.out.println("stated to init GL");
 		
 		GL.createCapabilities(true);
-		glClearColor(0,0,0,1);
+		glClearColor(0,0,1,1);
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
