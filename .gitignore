@@ -7,3 +7,6 @@ Game/.settings/*
 Engine/.project
 Engine/.classpath
 Engine/.settings/*
+Engine/Dependencies/*
+Engine/bin/*
+Game/bin/*
