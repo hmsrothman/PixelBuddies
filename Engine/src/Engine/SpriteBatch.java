@@ -1,5 +1,5 @@
 package Engine;
-import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
@@ -147,11 +147,6 @@ public class SpriteBatch {
 
 			motherfucker[i++] = v.uv.x;
 			motherfucker[i++] = v.uv.y;
-
-			motherfucker[i++] = v.color.x;
-			motherfucker[i++] = v.color.y;
-			motherfucker[i++] = v.color.z;
-			motherfucker[i++] = v.color.w;
 		}
 
 		glBindBuffer(GL_ARRAY_BUFFER, vboID);
@@ -195,12 +190,10 @@ public class SpriteBatch {
 		// Enable Vertex Attribs
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
-		glEnableVertexAttribArray(2);
 
 		// Setup Vertex Attrib Pointers
-		glVertexAttribPointer(0, 2, GL_FLOAT, false, 4 * 8, 0);
-		glVertexAttribPointer(1, 2, GL_FLOAT, false, 4 * 8, 2 * 4);
-		glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, true, 4 * 8, 4 * 4);
+		glVertexAttribPointer(0, 2, GL_FLOAT, false, 4 * 4, 0);
+		glVertexAttribPointer(1, 2, GL_FLOAT, false, 4 * 4, 2 * 4);
 
 		glBindVertexArray(0);
 	}

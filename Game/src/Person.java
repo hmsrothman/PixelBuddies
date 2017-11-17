@@ -3,6 +3,17 @@ import otherpeoplesmath.Vector2f;
 import otherpeoplesmath.Vector4f;
 
 public class Person {
+	static enum Name {
+		Tracy, Simon, Kat, Katherine
+	}
+
+	static enum State {
+		WalkingLeft, WalkingRight, StandingLeft, StandingRight
+	}
+	
+	
+	Vector2f gravity = new Vector2f(0,-.1f);
+	
 	Vector2f loc;
 	Name name;
 	State state;
@@ -29,7 +40,7 @@ public class Person {
 		depth = 0;
 		destRect = new Vector4f(loc.x, loc.y, width / height * 10, 10);
 		uvRect = new Vector4f(0, 0, 1, 1);
-		color = new Vector4f(0, 0, 0, 0);
+		color = new Vector4f(1, 1, 1, 1);
 
 		walkCycle = new int[4];
 		
@@ -41,10 +52,22 @@ public class Person {
 			walkCycle[3] = PeopleTextures.textures.get(PeopleTextures.SIMON_WALK_3).id;
 			break;
 		case Tracy:
-			walkCycle[0] = PeopleTextures.textures.get(PeopleTextures.TRACY_WALK_1).id;
-			walkCycle[1] = PeopleTextures.textures.get(PeopleTextures.TRACY_WALK_2).id;
-			walkCycle[2] = PeopleTextures.textures.get(PeopleTextures.TRACY_WALK_1).id;
+			walkCycle[0] = PeopleTextures.textures.get(PeopleTextures.TRACY_WALK_2).id;
+			walkCycle[1] = PeopleTextures.textures.get(PeopleTextures.TRACY_WALK_1).id;
+			walkCycle[2] = PeopleTextures.textures.get(PeopleTextures.TRACY_WALK_2).id;
 			walkCycle[3] = PeopleTextures.textures.get(PeopleTextures.TRACY_WALK_3).id;
+			break;
+		case Kat:
+			walkCycle[0] = PeopleTextures.textures.get(PeopleTextures.KAT_WALK_2).id;
+			walkCycle[1] = PeopleTextures.textures.get(PeopleTextures.KAT_WALK_1).id;
+			walkCycle[2] = PeopleTextures.textures.get(PeopleTextures.KAT_WALK_2).id;
+			walkCycle[3] = PeopleTextures.textures.get(PeopleTextures.KAT_WALK_3).id;
+			break;
+		case Katherine:
+			walkCycle[0] = PeopleTextures.textures.get(PeopleTextures.KATHERINE_WALK_2).id;
+			walkCycle[1] = PeopleTextures.textures.get(PeopleTextures.KATHERINE_WALK_1).id;
+			walkCycle[2] = PeopleTextures.textures.get(PeopleTextures.KATHERINE_WALK_2).id;
+			walkCycle[3] = PeopleTextures.textures.get(PeopleTextures.KATHERINE_WALK_3).id;
 			break;
 		default:
 			break;
@@ -56,29 +79,26 @@ public class Person {
 
 	}
 
-	public boolean update() {
+	public boolean update(Level level) {
+		boolean change=false;
+		if(!level.canWalk(loc)){
+			Vector2f.add(loc, gravity, loc);
+			destRect.y = loc.y;
+			change = true;
+		} else{
+			Vector2f.sub(loc, gravity, loc);
+		}
 		frameCounter++;
 		if (frameCounter >= 12) {
 			switch (state) {
 			case StandingLeft:
 				walkIndex = 0;
 				currentTexture = walkCycle[0];
-				return false;
+				return change;
 			case StandingRight:
 				walkIndex = 0;
 				currentTexture = walkCycle[0];
-				return false;
-			case WalkingLeft:
-				walkIndex++;
-				frameCounter = 0;
-				if (walkIndex == 4) {
-					walkIndex = 0;
-				}
-				currentTexture = walkCycle[walkIndex];
-				Vector2f.add(loc, new Vector2f(width * 5 / height, 0), loc);
-				destRect = new Vector4f(loc.x, loc.y, width / height * 10, 10);
-				frameCounter = 0;
-				return true;
+				return change;
 			case WalkingRight:
 				walkIndex++;
 				frameCounter = 0;
@@ -87,14 +107,28 @@ public class Person {
 				}
 				currentTexture = walkCycle[walkIndex];
 				Vector2f.sub(loc, new Vector2f(width * 5 / height, 0), loc);
+				destRect = new Vector4f(loc.x, loc.y, width / height * 10, 10);
+				frameCounter = 0;
+				change = true;
+				return change;
+			case WalkingLeft:
+				System.out.println("hello");
+				walkIndex++;
+				frameCounter = 0;
+				if (walkIndex == 4) {
+					walkIndex = 0;
+				}
+				currentTexture = walkCycle[walkIndex];
+				Vector2f.add(loc, new Vector2f(width * 5 / height, 0), loc);
 				destRect = new Vector4f(loc.x + width / height * 10, loc.y, -width / height * 10, 10);
 				frameCounter = 0;
-				return true;
+				change = true;
+				return change;
 			default:
-				return false;
+				return change;
 			}
 		}
-		return false;
+		return change;
 	}
 
 	public void draw(SpriteBatch batch) {
@@ -103,13 +137,5 @@ public class Person {
 
 	public void setState(State newState) {
 		state = newState;
-	}
-
-	static enum Name {
-		Tracy, Simon
-	}
-
-	static enum State {
-		WalkingLeft, WalkingRight, StandingLeft, StandingRight
 	}
 }

@@ -25,10 +25,10 @@ public class LevelLoader {
 			while ((line = br.readLine()) != null) {
 				String[] splitLine = line.split(split);
 				for (String s : splitLine) {
-					if (s.contains("X")) {
+					if (!s.contentEquals("")) {
 						//System.out.println(x);
 						//System.out.println(s);
-						level[x][y] = 1;
+						level[x][y] = Integer.parseInt(s);
 					}
 					x++;
 				}
