@@ -27,7 +27,7 @@ public class Game extends MainGame {
 	Person tracy;
 	// Person simon;
 	// Person kat;
-	Person katherine;
+	//Person katherine;
 
 	SpriteBatch batch;
 	GLSLProgram shader;
@@ -59,10 +59,10 @@ public class Game extends MainGame {
 		glUniformMatrix4fv(loc, false, mat);
 		camera.setScale(0.5f);
 
-		tracy = new Person(new Vector2f(0, 0), "Kat");
+		tracy = new Person(new Vector2f(25, 0), "Kat");
 		// simon = new Person(new Vector2f(10, 0), "Simon");
 		// kat = new Person(new Vector2f(20, 0), "Kat");
-		katherine = new Person(new Vector2f(30, 0), "Katherine");
+		//katherine = new Person(new Vector2f(30, 0), "Katherine");
 
 		level = new Level("C:\\Users\\Simon\\Code\\Java\\Game\\testlevel.csv");
 
@@ -82,7 +82,7 @@ public class Game extends MainGame {
 		}
 		// simon.update(level);
 		// kat.update(level);
-		katherine.update(level);
+		//katherine.update(level);
 
 		if (KeyboardInput.isKeyDown(GLFW_KEY_A)) {
 			tracy.state |= State.LEFT;
@@ -128,7 +128,7 @@ public class Game extends MainGame {
 
 		tracy.draw(batch);
 		// simon.draw(batch);
-		katherine.draw(batch);
+		//katherine.draw(batch);
 		// kat.draw(batch);
 		level.draw(batch);
 

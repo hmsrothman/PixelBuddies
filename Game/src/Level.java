@@ -37,7 +37,7 @@ public class Level {
 		for (int x = 0; x < levelData.length; x++) {
 			for (int y = 0; y < levelData[0].length; y++) {
 				if (levelData[x][y] != 0) {
-					tiles.add(new Tile(textures[levelData[x][y]-1].id,new Vector4f(x * scale, 5 - (y * scale), scale, scale)));
+					tiles.add(new Tile(textures[levelData[x][y]-1].id,new Vector4f(x * scale, 15 - (y * scale), scale, scale)));
 				}
 			}
 		}
@@ -48,7 +48,7 @@ public class Level {
 	}
 
 	public boolean canWalk(int x, int y){
-		y = 2-y;
+		y = 4-y;
 		
 		System.out.println(x);
 		if(x<0||x>=levelData.length||y<0||y>=levelData[0].length){

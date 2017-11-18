@@ -11,7 +11,7 @@ public class LevelLoader {
 		int y = 0;
 		int x = 0;
 
-		int[][] level = new int[41][8];
+		int[][] level = new int[41][15];
 		for (x = 0; x < 41; x++) {
 			for (y = 0; y < 8; y++) {
 				level[x][y] = 0;

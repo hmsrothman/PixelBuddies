@@ -63,21 +63,30 @@ public class Person {
 	private void move(Vector2f displace, Level level) {
 		int x1 = (int) Math.floor((pos.x + displace.x) / 5f);
 		int x2 = (int) Math.floor((pos.x + +displace.x + (width * 10 / height)) / 5f);
+		int x3 = (int) Math.floor((pos.x + +displace.x + (width * 5 / height)) / 5f);
 		int cx1 = (int) Math.floor((pos.x) / 5f);
 		int cx2 = (int) Math.floor((pos.x + (width * 10 / height)) / 5f);
+		int cx3 = (int) Math.floor((pos.x + (width * 5 / height)) / 5f);
 
 		int y1 = (int) Math.ceil((pos.y + displace.y) / 5f);
 		int y2 = (int) Math.ceil((pos.y + +displace.y + 10) / 5f);
+		int y3 = (int) Math.ceil((pos.y + +displace.y + 5) / 5f);
 		int cy1 = (int) Math.ceil((pos.y) / 5f);
 		int cy2 = (int) Math.ceil((pos.y + 10) / 5f);
+		int cy3 = (int) Math.ceil((pos.y + 5) / 5f);
 
-		if (level.canWalk(cx1, y1) || level.canWalk(cx2, y1)) {
+		if (level.canWalk(cx1, y1) || level.canWalk(cx2, y1) || level.canWalk(cx3, y1) || level.canWalk(cx1, y2)
+				|| level.canWalk(cx2, y2) || level.canWalk(cx3, y2) || level.canWalk(cx1, y3) || level.canWalk(cx2, y3)
+				|| level.canWalk(cx3, y3)) {
 			System.out.println("dont fall");
 			state &= ~State.JUMPING;
 			velocity.y = 0;
 			displace.y = 0;
 		}
-		if (level.canWalk(x1, cy1) || level.canWalk(x2, cy1) || level.canWalk(x1, cy2) || level.canWalk(x2, cy2)) {
+		if (level.canWalk(x1, cy1) || level.canWalk(x2, cy1) || level.canWalk(x3, cy1) || level.canWalk(x1, cy2)
+				|| level.canWalk(x2, cy2) || level.canWalk(x3, cy2) || level.canWalk(x1, cy3) || level.canWalk(x2, cy3)
+				|| level.canWalk(x3, cy3)) {
+			System.out.println("dont fall");
 			// state &= ~State.JUMPING;
 			velocity.x = 0;
 			displace.x = 0;
@@ -122,6 +131,6 @@ public class Person {
 			currentTexture = jumpSprite.id;
 		}
 
-		currentTexture = 0;
+		//currentTexture = 0;
 	}
 }
