@@ -29,14 +29,14 @@ public class Level {
 
 	public Level(String path) {
 		textures[0] = new Texture("C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\FLOOR.bmp");
+		textures[2] = new Texture(otherpeoplescode.FontUtil.stringToBufferedImage("fuck"));
 		textures[1] = new Texture("C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\FLOOR.bmp");
-		textures[2] = new Texture("C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\FLOOR.bmp");
+		//textures[2] = new Texture("C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\FLOOR.bmp");
 
 		levelData = LevelLoader.loadLevel(path);
 		for (int x = 0; x < levelData.length; x++) {
 			for (int y = 0; y < levelData[0].length; y++) {
 				if (levelData[x][y] != 0) {
-					System.out.println(levelData[x][y]);
 					tiles.add(new Tile(textures[levelData[x][y]-1].id,new Vector4f(x * scale, 5 - (y * scale), scale, scale)));
 				}
 			}
@@ -47,12 +47,10 @@ public class Level {
 		tiles.stream().forEach(r -> batch.draw(r.rect, uvRect, r.tex, depth, color));
 	}
 
-	public boolean canWalk(Vector2f pos){
-		int x = (int)(pos.x/scale);
-		int y = (int)(2f-(pos.y/scale));
+	public boolean canWalk(int x, int y){
+		y = 2-y;
 		
-		System.out.println(x + "," + y);
-		
+		System.out.println(x);
 		if(x<0||x>=levelData.length||y<0||y>=levelData[0].length){
 			return false;
 		}

@@ -25,8 +25,8 @@ import otherpeoplesmath.Vector4f;
 public class Game extends MainGame {
 
 	Person tracy;
-	Person simon;
-	Person kat;
+	// Person simon;
+	// Person kat;
 	Person katherine;
 
 	SpriteBatch batch;
@@ -35,7 +35,7 @@ public class Game extends MainGame {
 	Camera2D camera;
 
 	Level level;
-	
+
 	int i = 0;
 	int j = 0;
 
@@ -59,14 +59,14 @@ public class Game extends MainGame {
 		glUniformMatrix4fv(loc, false, mat);
 		camera.setScale(0.5f);
 
-		tracy = new Person(new Vector2f(0, 0), Person.Name.Tracy);
-		simon = new Person(new Vector2f(10, 0), Person.Name.Simon);
-		kat = new Person(new Vector2f(20, 0), Person.Name.Kat);
-		katherine = new Person(new Vector2f(30, 0), Person.Name.Katherine);
+		tracy = new Person(new Vector2f(0, 0), "Kat");
+		// simon = new Person(new Vector2f(10, 0), "Simon");
+		// kat = new Person(new Vector2f(20, 0), "Kat");
+		katherine = new Person(new Vector2f(30, 0), "Katherine");
 
 		level = new Level("C:\\Users\\Simon\\Code\\Java\\Game\\testlevel.csv");
-		
-		camera.translate(new Vector2f(0,20));
+
+		camera.translate(new Vector2f(0, 20));
 	}
 
 	@Override
@@ -77,31 +77,27 @@ public class Game extends MainGame {
 
 	@Override
 	protected void update() {
-		if(simon.update(level)){
-			camera.setPosition(new Vector2f(simon.loc.x,camera.pos.y));
+		if (tracy.update(level)) {
+			camera.setPosition(new Vector2f(tracy.pos.x, camera.pos.y));
 		}
-		tracy.update(level);
-		kat.update(level);
+		// simon.update(level);
+		// kat.update(level);
 		katherine.update(level);
-		
-		if(KeyboardInput.isKeyDown(GLFW_KEY_A)){
-			tracy.setState(Person.State.WalkingRight);;
-			simon.setState(Person.State.WalkingRight);;
-			kat.setState(Person.State.WalkingRight);
-			katherine.setState(Person.State.WalkingRight);
-		} else if(KeyboardInput.isKeyDown(GLFW_KEY_D)){
-			tracy.setState(Person.State.WalkingLeft);;
-			simon.setState(Person.State.WalkingLeft);;
-			kat.setState(Person.State.WalkingLeft);
-			katherine.setState(Person.State.WalkingLeft);
-		} else{
-			tracy.setState(Person.State.StandingLeft);
-			simon.setState(Person.State.StandingLeft);
-			kat.setState(Person.State.StandingLeft);
-			katherine.setState(Person.State.StandingLeft);
 
+		if (KeyboardInput.isKeyDown(GLFW_KEY_A)) {
+			tracy.state |= State.LEFT;
+			tracy.state |= State.WALKING;
+		} else if (KeyboardInput.isKeyDown(GLFW_KEY_D)) {
+			tracy.state &= ~State.LEFT;
+			tracy.state |= State.WALKING;
+		} else {
+			tracy.state &= ~State.WALKING;
 		}
-		
+
+		if (KeyboardInput.isKeyDown(GLFW_KEY_SPACE)) {
+			tracy.jump();
+		}
+
 		if (camera.update()) {
 			shader.use();
 			int loc = shader.getUniformLocation("cameraMat");
@@ -126,16 +122,16 @@ public class Game extends MainGame {
 
 		int textureLocation = shader.getUniformLocation("sampler");
 		glUniform1i(textureLocation, 0);
-		
+
 		shader.use();
 		batch.begin();
-		
+
 		tracy.draw(batch);
-		simon.draw(batch);
+		// simon.draw(batch);
 		katherine.draw(batch);
-		kat.draw(batch);
+		// kat.draw(batch);
 		level.draw(batch);
-		
+
 		batch.end();
 		batch.renderBatch();
 		shader.unuse();

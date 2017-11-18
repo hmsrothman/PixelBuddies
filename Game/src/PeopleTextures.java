@@ -5,44 +5,58 @@ import java.util.Map;
 import Engine.Texture;
 
 public class PeopleTextures {
-	static final String TRACY_WALK_1 = "C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\Sweet, Sweet BMPs\\STND Tracy 1.bmp";
-	static final String TRACY_WALK_2 = "C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\Sweet, Sweet BMPs\\STND Tracy 2.bmp";
-	static final String TRACY_WALK_3 = "C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\Sweet, Sweet BMPs\\STND Tracy 3.bmp";
+	private static class Tex {
+		String name;
+		int walk;
 
-	static final String SIMON_WALK_1 = "C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\Sweet, Sweet BMPs\\STND Simon 1.bmp";
-	static final String SIMON_WALK_2 = "C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\Sweet, Sweet BMPs\\STND Simon 2.bmp";
-	static final String SIMON_WALK_3 = "C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\Sweet, Sweet BMPs\\STND Simon 3.bmp";
+		public Tex(String Name, int Walk) {
+			name = Name;
+			walk = Walk;
+		}
+	}
 
-	static final String KAT_WALK_1 = "C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\Sweet, Sweet BMPs\\STND Kat 1.bmp";
-	static final String KAT_WALK_2 = "C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\Sweet, Sweet BMPs\\STND Kat 2.bmp";
-	static final String KAT_WALK_3 = "C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\Sweet, Sweet BMPs\\STND Kat 3.bmp";
-	
-	static final String KATHERINE_WALK_1 = "C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\Sweet, Sweet BMPs\\STND Treecko 1.bmp";
-	static final String KATHERINE_WALK_2 = "C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\Sweet, Sweet BMPs\\STND Treecko 2.bmp";
-	static final String KATHERINE_WALK_3 = "C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\Sweet, Sweet BMPs\\STND Treecko 3.bmp";
+	static final String BASE_STRING = "C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\Sweet, Sweet BMPs\\STND ";
 
-	public static Map<String, Texture> textures = new HashMap<String, Texture>();
+	private static Map<Tex, Texture> textures = new HashMap<Tex, Texture>();
 
-	private static boolean initialized = false;
+	public static Texture[] getWalkCycle(String name) {
+		Texture[] textures = new Texture[4];
+		Tex tex = new Tex(name, 2);
+		textures[0] = getTexture(tex);
+		tex = new Tex(name, 1);
+		textures[1] = getTexture(tex);
+		tex = new Tex(name, 2);
+		textures[2] = getTexture(tex);
+		tex = new Tex(name, 3);
+		textures[3] = getTexture(tex);
+		return textures;
+	}
 
-	public static void loadTextures() {
-		if (!initialized) {
-			textures.put(TRACY_WALK_1, new Texture(TRACY_WALK_1));
-			textures.put(TRACY_WALK_2, new Texture(TRACY_WALK_2));
-			textures.put(TRACY_WALK_3, new Texture(TRACY_WALK_3));
-			
-			textures.put(SIMON_WALK_1, new Texture(SIMON_WALK_1));
-			textures.put(SIMON_WALK_2, new Texture(SIMON_WALK_2));
-			textures.put(SIMON_WALK_3, new Texture(SIMON_WALK_3));
-			
-			textures.put(KAT_WALK_1, new Texture(KAT_WALK_1));
-			textures.put(KAT_WALK_2, new Texture(KAT_WALK_2));
-			textures.put(KAT_WALK_3, new Texture(KAT_WALK_3));
-			
-			textures.put(KATHERINE_WALK_1, new Texture(KATHERINE_WALK_1));
-			textures.put(KATHERINE_WALK_2, new Texture(KATHERINE_WALK_2));
-			textures.put(KATHERINE_WALK_3, new Texture(KATHERINE_WALK_3));
-			initialized = true;
+	public static Texture getJumpSprite(String name) {
+		Tex tex = new Tex(name, 5);
+		if (textures.containsKey(tex)) {
+			return textures.get(tex);
+		} else {
+			System.out.println(getJumpPath(name));
+			textures.put(tex, new Texture(getJumpPath(name)));
+			return textures.get(tex);
+		}
+	}
+
+	private static String getWalkPath(Tex tex) {
+		return (BASE_STRING + tex.name + " " + tex.walk + ".bmp");
+	}
+
+	private static String getJumpPath(String name) {
+		return (BASE_STRING + "Jump! " + name + ".bmp");
+	}
+
+	private static Texture getTexture(Tex tex) {
+		if (textures.containsKey(tex)) {
+			return textures.get(tex);
+		} else {
+			textures.put(tex, new Texture(getWalkPath(tex)));
+			return textures.get(tex);
 		}
 	}
 }

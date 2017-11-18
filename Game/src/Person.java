@@ -1,141 +1,127 @@
 import Engine.SpriteBatch;
+import Engine.Texture;
 import otherpeoplesmath.Vector2f;
 import otherpeoplesmath.Vector4f;
 
 public class Person {
-	static enum Name {
-		Tracy, Simon, Kat, Katherine
-	}
+	Vector2f gravity = new Vector2f(0, -0.01f);
+	Vector2f velocity = new Vector2f(0, 0);
+	Vector2f speed = new Vector2f(0, 0);
 
-	static enum State {
-		WalkingLeft, WalkingRight, StandingLeft, StandingRight
-	}
-	
-	
-	Vector2f gravity = new Vector2f(0,-.1f);
-	
-	Vector2f loc;
-	Name name;
-	State state;
+	Vector2f pos;
+	String name;
+	byte state;
 
 	int currentTexture;
-	int[] walkCycle;
+	Texture[] walkCycle;
+	Texture jumpSprite;
 
 	Vector4f destRect;
 	Vector4f uvRect;
 	Vector4f color;
 	float depth;
 
-	float height = 39, width = 27;
+	float height = 45, width = 30;
 
 	int frameCounter = 0;
 	int walkIndex = 0;
 
-	public Person(Vector2f loc, Name name) {
-		PeopleTextures.loadTextures();
-		this.loc = loc;
+	public Person(Vector2f loc, String name) {
+		this.pos = loc;
 		this.name = name;
-		this.state = State.StandingRight;
+		this.state = 0;
 
 		depth = 0;
 		destRect = new Vector4f(loc.x, loc.y, width / height * 10, 10);
 		uvRect = new Vector4f(0, 0, 1, 1);
 		color = new Vector4f(1, 1, 1, 1);
 
-		walkCycle = new int[4];
-		
-		switch(name){
-		case Simon:
-			walkCycle[0] = PeopleTextures.textures.get(PeopleTextures.SIMON_WALK_2).id;
-			walkCycle[1] = PeopleTextures.textures.get(PeopleTextures.SIMON_WALK_1).id;
-			walkCycle[2] = PeopleTextures.textures.get(PeopleTextures.SIMON_WALK_2).id;
-			walkCycle[3] = PeopleTextures.textures.get(PeopleTextures.SIMON_WALK_3).id;
-			break;
-		case Tracy:
-			walkCycle[0] = PeopleTextures.textures.get(PeopleTextures.TRACY_WALK_2).id;
-			walkCycle[1] = PeopleTextures.textures.get(PeopleTextures.TRACY_WALK_1).id;
-			walkCycle[2] = PeopleTextures.textures.get(PeopleTextures.TRACY_WALK_2).id;
-			walkCycle[3] = PeopleTextures.textures.get(PeopleTextures.TRACY_WALK_3).id;
-			break;
-		case Kat:
-			walkCycle[0] = PeopleTextures.textures.get(PeopleTextures.KAT_WALK_2).id;
-			walkCycle[1] = PeopleTextures.textures.get(PeopleTextures.KAT_WALK_1).id;
-			walkCycle[2] = PeopleTextures.textures.get(PeopleTextures.KAT_WALK_2).id;
-			walkCycle[3] = PeopleTextures.textures.get(PeopleTextures.KAT_WALK_3).id;
-			break;
-		case Katherine:
-			walkCycle[0] = PeopleTextures.textures.get(PeopleTextures.KATHERINE_WALK_2).id;
-			walkCycle[1] = PeopleTextures.textures.get(PeopleTextures.KATHERINE_WALK_1).id;
-			walkCycle[2] = PeopleTextures.textures.get(PeopleTextures.KATHERINE_WALK_2).id;
-			walkCycle[3] = PeopleTextures.textures.get(PeopleTextures.KATHERINE_WALK_3).id;
-			break;
-		default:
-			break;
-		
-		}
-		
+		walkCycle = PeopleTextures.getWalkCycle(name);
+		jumpSprite = PeopleTextures.getJumpSprite(name);
 
-		currentTexture = walkCycle[0];
-
+		currentTexture = walkCycle[0].id;
 	}
 
 	public boolean update(Level level) {
-		boolean change=false;
-		if(!level.canWalk(loc)){
-			Vector2f.add(loc, gravity, loc);
-			destRect.y = loc.y;
-			change = true;
-		} else{
-			Vector2f.sub(loc, gravity, loc);
-		}
 		frameCounter++;
-		if (frameCounter >= 12) {
-			switch (state) {
-			case StandingLeft:
-				walkIndex = 0;
-				currentTexture = walkCycle[0];
-				return change;
-			case StandingRight:
-				walkIndex = 0;
-				currentTexture = walkCycle[0];
-				return change;
-			case WalkingRight:
-				walkIndex++;
-				frameCounter = 0;
-				if (walkIndex == 4) {
-					walkIndex = 0;
-				}
-				currentTexture = walkCycle[walkIndex];
-				Vector2f.sub(loc, new Vector2f(width * 5 / height, 0), loc);
-				destRect = new Vector4f(loc.x, loc.y, width / height * 10, 10);
-				frameCounter = 0;
-				change = true;
-				return change;
-			case WalkingLeft:
-				System.out.println("hello");
-				walkIndex++;
-				frameCounter = 0;
-				if (walkIndex == 4) {
-					walkIndex = 0;
-				}
-				currentTexture = walkCycle[walkIndex];
-				Vector2f.add(loc, new Vector2f(width * 5 / height, 0), loc);
-				destRect = new Vector4f(loc.x + width / height * 10, loc.y, -width / height * 10, 10);
-				frameCounter = 0;
-				change = true;
-				return change;
-			default:
-				return change;
-			}
+		handleFalling(level);
+		handleWalking(level);
+		return true;
+	}
+
+	public void jump() {
+		if ((state & State.JUMPING) != State.JUMPING) {
+			velocity = new Vector2f(0, 0.5f);
+			state |= State.JUMPING;
 		}
-		return change;
 	}
 
 	public void draw(SpriteBatch batch) {
 		batch.draw(destRect, uvRect, currentTexture, depth, color);
 	}
 
-	public void setState(State newState) {
-		state = newState;
+	private void move(Vector2f displace, Level level) {
+		int x1 = (int) Math.floor((pos.x + displace.x) / 5f);
+		int x2 = (int) Math.floor((pos.x + +displace.x + (width * 10 / height)) / 5f);
+		int cx1 = (int) Math.floor((pos.x) / 5f);
+		int cx2 = (int) Math.floor((pos.x + (width * 10 / height)) / 5f);
+
+		int y1 = (int) Math.ceil((pos.y + displace.y) / 5f);
+		int y2 = (int) Math.ceil((pos.y + +displace.y + 10) / 5f);
+		int cy1 = (int) Math.ceil((pos.y) / 5f);
+		int cy2 = (int) Math.ceil((pos.y + 10) / 5f);
+
+		if (level.canWalk(cx1, y1) || level.canWalk(cx2, y1)) {
+			System.out.println("dont fall");
+			state &= ~State.JUMPING;
+			velocity.y = 0;
+			displace.y = 0;
+		}
+		if (level.canWalk(x1, cy1) || level.canWalk(x2, cy1) || level.canWalk(x1, cy2) || level.canWalk(x2, cy2)) {
+			// state &= ~State.JUMPING;
+			velocity.x = 0;
+			displace.x = 0;
+		}
+		Vector2f.add(displace, pos, pos);
+	}
+
+	private void handleFalling(Level level) {
+		Vector2f.add(velocity, gravity, velocity);
+		move(velocity, level);
+		destRect.y = pos.y;
+	}
+
+	private void handleWalking(Level level) {
+		if ((state & State.LEFT) == State.LEFT) { // going right
+			uvRect.z = 1f;
+			speed.x = -width / height * 5 / 12;
+		} else {
+			uvRect.z = -1f;
+			speed.x = width / height * 5 / 12;
+		}
+
+		if ((state & State.WALKING) == State.WALKING) {
+			move(speed, level);
+			destRect.x = pos.x;
+			if (frameCounter >= 12) {
+				frameCounter = 0;
+				walkIndex++;
+				if (walkIndex >= 4) {
+					walkIndex = 0;
+				}
+				currentTexture = walkCycle[walkIndex].id;
+			}
+		} else {
+			if (frameCounter >= 12) {
+				walkIndex = 0;
+				currentTexture = walkCycle[walkIndex].id;
+			}
+		}
+
+		if ((state & State.JUMPING) == State.JUMPING) {
+			currentTexture = jumpSprite.id;
+		}
+
+		currentTexture = 0;
 	}
 }

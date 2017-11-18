@@ -31,7 +31,6 @@ public class Camera2D {
 
 	public boolean update() {
 		if (needsUpdate) {
-			System.out.println("UPDATING CAMERA");
 			Vector3f translate = new Vector3f(-pos.x, -pos.y, 0);
 
 			orthoMat = MathUtil.toOrtho2D(orthoMat, 0.0f, 0.0f, screenWidth/scale, -screenHeight/scale);
