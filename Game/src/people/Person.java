@@ -1,16 +1,19 @@
+package people;
 import Engine.SpriteBatch;
 import Engine.Texture;
+import game.Level;
+import game.State;
 import otherpeoplesmath.Vector2f;
 import otherpeoplesmath.Vector4f;
 
-public class Person {
-	Vector2f gravity = new Vector2f(0, -0.01f);
+public abstract class Person {
+	Vector2f gravity = new Vector2f(0, -0.035f);
 	Vector2f velocity = new Vector2f(0, 0);
 	Vector2f speed = new Vector2f(0, 0);
 
 	Vector2f pos;
 	String name;
-	byte state;
+	public byte state;
 
 	Texture currentTexture;
 	Texture[] walkCycle;
@@ -51,7 +54,7 @@ public class Person {
 
 	public void jump() {
 		if ((state & State.JUMPING) != State.JUMPING) {
-			velocity = new Vector2f(0, 0.5f);
+			velocity = new Vector2f(0, 1f);
 			state |= State.JUMPING;
 		}
 	}
@@ -60,7 +63,7 @@ public class Person {
 		batch.draw(destRect, uvRect, currentTexture.id, depth, color);
 	}
 
-	private void move(Vector2f displace, Level level) {
+	protected void move(Vector2f displace, Level level) {
 		float[] bounds = getTexBounds(walkCycle[0]);
 
 		int x1 = (int) Math.floor((pos.x + displace.x + bounds[0]) / 5f);
