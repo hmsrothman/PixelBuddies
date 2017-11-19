@@ -166,8 +166,15 @@ public class Game extends MainGame {
 		simon.draw(batch);
 		//katherine.draw(batch);
 		//kat.draw(batch);
-		level.draw(batch);
+		level.drawLevel(batch);
 
+		batch.end();
+		batch.renderBatch();
+		
+		batch.begin();
+		
+		level.drawBackground(batch);
+		
 		batch.end();
 		batch.renderBatch();
 		shader.unuse();
