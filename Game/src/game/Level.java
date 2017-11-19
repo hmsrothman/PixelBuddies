@@ -1,4 +1,5 @@
 package game;
+
 import java.util.ArrayList;
 
 import Engine.SpriteBatch;
@@ -17,7 +18,7 @@ public class Level {
 		}
 	}
 
-	float scale = 5;
+	float scale = 5 * 30 / 45f;
 
 	int[][] levelData;
 
@@ -31,7 +32,7 @@ public class Level {
 	public Level(String path) {
 		textures[0] = new Texture("C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\FLOOR.bmp");
 		textures[2] = new Texture(otherpeoplescode.FontUtil.stringToBufferedImage("fuck"));
-		textures[1] = new Texture("C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\FLOOR.bmp");
+		textures[1] = new Texture("C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\Floor Texture.bmp");
 		textures[3] = new Texture("C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\Butts Tunnels Wall Texture 2.0.bmp");
 
 		// textures[2] = new
@@ -42,17 +43,17 @@ public class Level {
 			for (int y = 0; y < levelData[0].length; y++) {
 				if (levelData[x][y] != 0) {
 					tiles.add(new Tile(textures[levelData[x][y] - 1].id,
-							new Vector4f(x * scale, 15 - (y * scale), scale, scale)));
+							new Vector4f(x * scale, 3 * scale - (y * scale), scale, scale)));
 				}
 			}
 		}
-		
-		for(int x=-50;x<200;x+=20){
-			for(int y=-50;y<50;y+=20){
-				if((y/10)%2==0){
-					tiles.add(new Tile(textures[3].id,new Vector4f(x,y,20,20)));
-				} else{
-					tiles.add(new Tile(textures[3].id,new Vector4f(x,y,20,20)));
+
+		for (int x = -50; x < 200; x += 20) {
+			for (int y = -50; y < 50; y += 20) {
+				if ((y / 10) % 2 == 0) {
+					tiles.add(new Tile(textures[3].id, new Vector4f(x, y, 20, 20)));
+				} else {
+					tiles.add(new Tile(textures[3].id, new Vector4f(x, y, 20, 20)));
 				}
 			}
 		}
