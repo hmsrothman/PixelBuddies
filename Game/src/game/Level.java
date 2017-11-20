@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import Engine.SpriteBatch;
 import Engine.Texture;
-import otherpeoplesmath.Vector2f;
 import otherpeoplesmath.Vector4f;
 
 public class Level {
@@ -18,7 +17,7 @@ public class Level {
 		}
 	}
 
-	float scale = 5 * 30 / 45f;
+	public float scale = 5 * 30 / 45f;
 
 	int[][] levelData;
 
@@ -59,7 +58,7 @@ public class Level {
 	public void drawLevel(SpriteBatch batch) {
 		tiles.stream().forEach(r -> batch.draw(r.rect, uvRect, r.tex, depth, color));
 	}
-	
+
 	public void drawBackground(SpriteBatch batch) {
 		background.stream().forEach(r -> batch.draw(r.rect, uvRect, r.tex, depth, color));
 	}

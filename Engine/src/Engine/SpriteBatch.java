@@ -1,8 +1,7 @@
 package Engine;
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
-import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
 import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.glDrawArrays;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
@@ -114,7 +113,6 @@ public class SpriteBatch {
 		vertices.ensureCapacity(glyphs.size() * 6);
 
 		int offset = 0;
-		int currentVertex = 0;
 		renderBatches.add(new RenderBatch(offset, 6, glyphs.get(0).texture));
 		vertices.add(glyphs.get(0).topLeft);
 		vertices.add(glyphs.get(0).bottomLeft);

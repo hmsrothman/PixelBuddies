@@ -1,4 +1,5 @@
 package people;
+
 import Engine.SpriteBatch;
 import Engine.Texture;
 import game.Level;
@@ -28,6 +29,8 @@ public abstract class Person {
 
 	int frameCounter = 0;
 	int walkIndex = 0;
+
+	boolean landed = false;
 
 	public Person(Vector2f loc, String name) {
 		this.pos = loc;
@@ -66,29 +69,31 @@ public abstract class Person {
 	protected void move(Vector2f displace, Level level) {
 		float[] bounds = getTexBounds(walkCycle[0]);
 
-		int x1 = (int) Math.floor((pos.x + displace.x + bounds[0]) / 5f);
-		int x2 = (int) Math.floor((pos.x + +displace.x + bounds[1]) / 5f);
-		int x3 = (int) Math.floor((pos.x + +displace.x + width / 2) / 5f);
-		int cx1 = (int) Math.floor((pos.x + bounds[0]) / 5f);
-		int cx2 = (int) Math.floor((pos.x + bounds[1]) / 5f);
-		int cx3 = (int) Math.floor((pos.x + width / 2) / 5f);
+		int x1 = (int) Math.floor((pos.x + displace.x + bounds[0]) / level.scale);
+		int x2 = (int) Math.floor((pos.x + +displace.x + bounds[1]) / level.scale);
+		int x3 = (int) Math.floor((pos.x + +displace.x + width / 2) / level.scale);
+		int cx1 = (int) Math.floor((pos.x + bounds[0]) / level.scale);
+		int cx2 = (int) Math.floor((pos.x + bounds[1]) / level.scale);
+		int cx3 = (int) Math.floor((pos.x + width / 2) / level.scale);
 
-		int y1 = (int) Math.ceil((pos.y + displace.y + bounds[2]) / 5f);
-		int y2 = (int) Math.ceil((pos.y + +displace.y + bounds[3]) / 5f);
-		int y3 = (int) Math.ceil((pos.y + +displace.y + height / 2) / 5f);
-		int cy1 = (int) Math.ceil((pos.y + bounds[2]) / 5f);
-		int cy2 = (int) Math.ceil((pos.y + bounds[3]) / 5f);
-		int cy3 = (int) Math.ceil((pos.y + height / 2) / 5f);
+		int y1 = (int) Math.ceil((pos.y + displace.y + bounds[2]) / level.scale);
+		int y2 = (int) Math.ceil((pos.y + +displace.y + bounds[3]) / level.scale);
+		int y3 = (int) Math.ceil((pos.y + +displace.y + height / 2) / level.scale);
+		int cy1 = (int) Math.ceil((pos.y + bounds[2]) / level.scale);
+		int cy2 = (int) Math.ceil((pos.y + bounds[3]) / level.scale);
+		int cy3 = (int) Math.ceil((pos.y + height / 2) / level.scale);
 
 		if (level.canWalk(cx1, y1) || level.canWalk(cx2, y1) || level.canWalk(cx3, y1) || level.canWalk(cx1, y2)
 				|| level.canWalk(cx2, y2) || level.canWalk(cx3, y2) || level.canWalk(cx1, y3) || level.canWalk(cx2, y3)
 				|| level.canWalk(cx3, y3)) {
 
 			state &= ~State.JUMPING;
+			landed = true;
 			velocity.y = 0;
 			displace.y = 0;
 			if (level.canWalk(cx1, y2) || level.canWalk(cx2, y2) || level.canWalk(cx3, y2)) {
 				state |= State.JUMPING;
+				landed = false;
 			}
 		}
 		if (level.canWalk(x1, cy1) || level.canWalk(x2, cy1) || level.canWalk(x3, cy1) || level.canWalk(x1, cy2)

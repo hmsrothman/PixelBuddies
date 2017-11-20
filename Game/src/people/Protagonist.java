@@ -1,8 +1,5 @@
 package people;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
 import Engine.Camera2D;
 import game.Level;
 import otherpeoplesmath.Vector2f;
@@ -16,7 +13,7 @@ public class Protagonist extends Leader {
 		this.camera = camera;
 	}
 
-	public Protagonist(Vector2f loc, String name, Person follower, Camera2D camera) {
+	public Protagonist(Vector2f loc, String name, Follower follower, Camera2D camera) {
 		super(loc, name, follower);
 		this.camera = camera;
 	}
@@ -27,7 +24,6 @@ public class Protagonist extends Leader {
 		if (displacement.x == 0 && displacement.y == 0) {
 
 		} else {
-
 			camera.setPosition(new Vector2f(pos.x, camera.pos.y));
 		}
 	}
