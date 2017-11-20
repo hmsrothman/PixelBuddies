@@ -30,8 +30,6 @@ public abstract class Person {
 	int frameCounter = 0;
 	int walkIndex = 0;
 
-	boolean landed = false;
-
 	public Person(Vector2f loc, String name) {
 		this.pos = loc;
 		this.name = name;
@@ -88,12 +86,10 @@ public abstract class Person {
 				|| level.canWalk(cx3, y3)) {
 
 			state &= ~State.JUMPING;
-			landed = true;
 			velocity.y = 0;
 			displace.y = 0;
 			if (level.canWalk(cx1, y2) || level.canWalk(cx2, y2) || level.canWalk(cx3, y2)) {
 				state |= State.JUMPING;
-				landed = false;
 			}
 		}
 		if (level.canWalk(x1, cy1) || level.canWalk(x2, cy1) || level.canWalk(x3, cy1) || level.canWalk(x1, cy2)

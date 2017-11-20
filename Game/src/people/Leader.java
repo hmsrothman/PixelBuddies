@@ -13,6 +13,8 @@ public class Leader extends Person {
 	public Leader(Vector2f loc, String name, Follower follower) {
 		super(loc, name);
 		this.follower = follower;
+		follower.leaderPos = pos;
+		follower.offset = offset;
 	}
 
 	public Leader(Vector2f loc, String name) {
@@ -21,27 +23,20 @@ public class Leader extends Person {
 
 	@Override
 	protected void move(Vector2f displacement, Level level) {
-		// if (follower != null) {
-		// follower.state = state;
-		// }
 		super.move(displacement, level);
 	}
 
 	@Override
 	public void jump() {
+		if ((state & State.JUMPING) != State.JUMPING) {
+			follower.issueJumpCommand(new Vector2f(pos));
+		}
 		super.jump();
-		if ((state & State.JUMPING) == State.JUMPING) {
-			follower.issueCommand(new FollowCommand(new Vector2f(pos),true));
-		} 
 	}
 
 	@Override
 	public boolean update(Level level) {
 		boolean r = super.update(level);
-		if (follower.mode != FollowMode.JUMPING) {
-			Vector2f.add(offset, pos, followerPos);
-			follower.issueCommand(new FollowCommand(followerPos, false));
-		}
 		return r;
 	}
 
