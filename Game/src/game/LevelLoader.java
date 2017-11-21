@@ -1,4 +1,5 @@
 package game;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -27,8 +28,6 @@ public class LevelLoader {
 				String[] splitLine = line.split(split);
 				for (String s : splitLine) {
 					if (!s.contentEquals("")) {
-						//System.out.println(x);
-						//System.out.println(s);
 						level[x][y] = Integer.parseInt(s);
 					}
 					x++;
@@ -48,13 +47,13 @@ public class LevelLoader {
 
 		for (y = 0; y < 8; y++) {
 			for (x = 0; x < 10; x++) {
-			//	System.out.print(level[x][y]);
+				// System.out.print(level[x][y]);
 			}
-			//System.out.println();
+			// System.out.println();
 		}
-		
-		return(level);
+
+		return (level);
 
 	}
-	
+
 }

@@ -1,13 +1,13 @@
 package people;
 
 import game.Level;
-import game.State;
 import otherpeoplesmath.Vector2f;
 
 public class Leader extends Person {
+	float offsetDist = 5;
 
 	Follower follower = null;
-	Vector2f offset = new Vector2f(-5, 0);
+	Vector2f offset = new Vector2f(-offsetDist, 0);
 	Vector2f followerPos = new Vector2f();
 
 	public Leader(Vector2f loc, String name, Follower follower) {

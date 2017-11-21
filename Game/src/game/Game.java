@@ -1,7 +1,7 @@
 package game;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
+import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
@@ -25,6 +25,7 @@ import otherpeoplesmath.Matrix4f;
 import otherpeoplesmath.Vector2f;
 import people.Follower;
 import people.Protagonist;
+import people.State;
 
 public class Game extends MainGame {
 
@@ -64,7 +65,7 @@ public class Game extends MainGame {
 		camera.setScale(0.5f);
 
 		simon = new Follower(new Vector2f(0, 1), "Simon");
-		tracy = new Protagonist(new Vector2f(10, 1), "Kat", simon, camera);
+		tracy = new Protagonist(new Vector2f(10, 1), "Tracy", simon, camera);
 
 		// kat = new Leader(new Vector2f(20, 0), "Kat");
 		// katherine = new Leader(new Vector2f(30, 0), "Katherine");
@@ -132,6 +133,12 @@ public class Game extends MainGame {
 			// kat.jump();
 
 			// katherine.jump();
+		}
+
+		if (KeyboardInput.isKeyDown(GLFW_KEY_E)) {
+			tracy.play();
+		} else{
+			tracy.stopPlay();
 		}
 
 		if (camera.update()) {

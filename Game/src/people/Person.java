@@ -3,12 +3,11 @@ package people;
 import Engine.SpriteBatch;
 import Engine.Texture;
 import game.Level;
-import game.State;
 import otherpeoplesmath.Vector2f;
 import otherpeoplesmath.Vector4f;
 
 public abstract class Person {
-	Vector2f gravity = new Vector2f(0, -0.035f);
+	Vector2f gravity = new Vector2f(0, -0.04f);
 	Vector2f velocity = new Vector2f(0, 0);
 	Vector2f speed = new Vector2f(0, 0);
 
@@ -76,14 +75,18 @@ public abstract class Person {
 
 		int y1 = (int) Math.ceil((pos.y + displace.y + bounds[2]) / level.scale);
 		int y2 = (int) Math.ceil((pos.y + +displace.y + bounds[3]) / level.scale);
-		int y3 = (int) Math.ceil((pos.y + +displace.y + height / 2) / level.scale);
+		int y3 = (int) Math.ceil((pos.y + +displace.y + height / 3) / level.scale);
+		int y4 = (int) Math.ceil((pos.y + +displace.y + height * 2 / 3) / level.scale);
+
 		int cy1 = (int) Math.ceil((pos.y + bounds[2]) / level.scale);
 		int cy2 = (int) Math.ceil((pos.y + bounds[3]) / level.scale);
-		int cy3 = (int) Math.ceil((pos.y + height / 2) / level.scale);
+		int cy3 = (int) Math.ceil((pos.y + height / 3) / level.scale);
+		int cy4 = (int) Math.ceil((pos.y + height * 2 / 3) / level.scale);
 
 		if (level.canWalk(cx1, y1) || level.canWalk(cx2, y1) || level.canWalk(cx3, y1) || level.canWalk(cx1, y2)
 				|| level.canWalk(cx2, y2) || level.canWalk(cx3, y2) || level.canWalk(cx1, y3) || level.canWalk(cx2, y3)
-				|| level.canWalk(cx3, y3)) {
+				|| level.canWalk(cx3, y3) || level.canWalk(cx1, y4) || level.canWalk(cx2, y4)
+				|| level.canWalk(cx3, y4)) {
 
 			state &= ~State.JUMPING;
 			velocity.y = 0;
@@ -94,7 +97,8 @@ public abstract class Person {
 		}
 		if (level.canWalk(x1, cy1) || level.canWalk(x2, cy1) || level.canWalk(x3, cy1) || level.canWalk(x1, cy2)
 				|| level.canWalk(x2, cy2) || level.canWalk(x3, cy2) || level.canWalk(x1, cy3) || level.canWalk(x2, cy3)
-				|| level.canWalk(x3, cy3)) {
+				|| level.canWalk(x3, cy3) || level.canWalk(x1, cy4) || level.canWalk(x2, cy4)
+				|| level.canWalk(x3, cy4)) {
 			velocity.x = 0;
 			displace.x = 0;
 		}
@@ -137,11 +141,9 @@ public abstract class Person {
 		if ((state & State.JUMPING) == State.JUMPING) {
 			currentTexture = jumpSprite;
 		}
-
-		// currentTexture = 0;
 	}
 
-	private float[] getTexBounds(Texture texture) {
+	protected float[] getTexBounds(Texture texture) {
 		float minX = ((float) texture.minX) / texture.width * width;
 		float minY = ((float) texture.minY) / texture.height * height;
 		float maxX = ((float) texture.maxX) / texture.width * width;
@@ -152,7 +154,6 @@ public abstract class Person {
 			minX = width - maxX;
 			maxX = width - tmp;
 		}
-		// System.out.println(minX);
 		return (new float[] { minX, maxX, minY, maxY });
 	}
 }

@@ -1,14 +1,6 @@
-The number 5 that scales the coordinates in the move function needs to be fixed in lieu of the fact that the tiles are no longer 10 by 10. 
+We now have a collision error in allowing X motion
 
 FOLLOWING PLS
-	one idea is some sort of queue of positions or statuses or move commands?
-	or to basically set simon.pos = tracy.pos - <1,0> and then leave some sort of indicator of when a jump should happen
-	*****If tracy jumps and hits a wall, what happens to Simon*****
+	if protagonist is not moving and follower is trying to move for x amount of time, follower jumps. 
 
-
-important edge case:
-	I am following Tracy
-	Tracy jumps and hits wall, sides down and lands on ground
-	I follow and jump in the same spot, hit wall in the same spot
-	I then land right on Tracy
-	Then I walk back to my spot behind her
+The case that breaks it is if follower manages to fall into a hole or smth and then leader jumps somewhere else 

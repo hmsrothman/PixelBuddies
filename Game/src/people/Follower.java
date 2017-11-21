@@ -3,14 +3,13 @@ package people;
 import java.util.LinkedList;
 
 import game.Level;
-import game.State;
 import otherpeoplesmath.Vector2f;
 
-enum FollowMode {
-	NORMAL, JUMPING, RETURNING, WALKING_TO_JUMP
-}
-
 public class Follower extends Person {
+	enum FollowMode {
+		FORCE_FOLLOW, JUMPING, NORMAL, WALKING_TO_JUMP
+	}
+
 	Vector2f leaderPos;
 	Vector2f offset;
 	private Vector2f goalDir = new Vector2f();
@@ -22,7 +21,7 @@ public class Follower extends Person {
 
 	public Follower(Vector2f pos, String name) {
 		super(pos, name);
-		mode = FollowMode.NORMAL;
+		mode = FollowMode.FORCE_FOLLOW;
 	}
 
 	void issueJumpCommand(Vector2f pos) {
@@ -31,7 +30,7 @@ public class Follower extends Person {
 
 	@Override
 	public boolean update(Level level) {
-		if ((mode == FollowMode.NORMAL || mode == FollowMode.RETURNING) && jumpCommands.isEmpty()) {
+		if ((mode == FollowMode.FORCE_FOLLOW || mode == FollowMode.NORMAL) && jumpCommands.isEmpty()) {
 			Vector2f.add(leaderPos, offset, goalPos);
 			Vector2f.sub(goalPos, pos, goalDir);
 			if (goalDir.x > 0) {
@@ -42,8 +41,15 @@ public class Follower extends Person {
 				state |= State.WALKING;
 			} else {
 				state &= ~State.WALKING;
+				mode = FollowMode.FORCE_FOLLOW;
 			}
-		} else if (!jumpCommands.isEmpty() && (mode == FollowMode.NORMAL || mode == FollowMode.RETURNING)) {
+
+			if (Math.abs(pos.x - leaderPos.x) + Math.abs(pos.y - leaderPos.y) > -offset.x) {
+				mode = FollowMode.FORCE_FOLLOW;
+			} else {
+				mode = FollowMode.NORMAL;
+			}
+		} else if (!jumpCommands.isEmpty() && (mode == FollowMode.FORCE_FOLLOW || mode == FollowMode.NORMAL)) {
 			mode = FollowMode.WALKING_TO_JUMP;
 			goalPos = jumpCommands.poll();
 		} else if (mode == FollowMode.WALKING_TO_JUMP) {
@@ -79,10 +85,11 @@ public class Follower extends Person {
 		boolean r = super.update(level);
 
 		if ((state & State.JUMPING) != State.JUMPING && mode == FollowMode.JUMPING) {
-			mode = FollowMode.RETURNING;
+			mode = FollowMode.NORMAL;
 			goalPos = new Vector2f();
 		}
 
+		System.out.println(mode);
 		return r;
 	}
 
@@ -90,4 +97,20 @@ public class Follower extends Person {
 	public void jump() {
 		super.jump();
 	}
+
+	@Override
+	protected void move(Vector2f displace, Level level) {
+		if (mode == FollowMode.NORMAL) {
+			float[] bounds = getTexBounds(walkCycle[0]);
+			int x = (int) Math.floor((pos.x + +displace.x + bounds[1]) / level.scale);
+			int y = (int) Math.ceil((pos.y + displace.y + bounds[2] - 1) / level.scale);
+
+			if (!level.canWalk(x, y)) {
+				displace.x = 0;
+				state &= ~State.WALKING;
+			}
+		}
+		super.move(displace, level);
+	}
+
 }

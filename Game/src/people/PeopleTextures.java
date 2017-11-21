@@ -60,4 +60,11 @@ public class PeopleTextures {
 			return textures.get(tex);
 		}
 	}
+
+	public static Texture[] getViolin() {
+		Texture[] t = new Texture[2];
+		t[0] = new Texture(BASE_STRING + "Violin Right.bmp");
+		t[1] = new Texture(BASE_STRING + "Violin Left.bmp");
+		return t;
+	}
 }
