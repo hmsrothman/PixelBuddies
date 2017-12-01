@@ -29,7 +29,7 @@ public class Follower extends Person {
 	}
 
 	@Override
-	public boolean update(Level level) {
+	public byte update(Level level) {
 		if ((mode == FollowMode.FORCE_FOLLOW || mode == FollowMode.NORMAL) && jumpCommands.isEmpty()) {
 			Vector2f.add(leaderPos, offset, goalPos);
 			Vector2f.sub(goalPos, pos, goalDir);
@@ -82,14 +82,18 @@ public class Follower extends Person {
 			jump();
 		}
 
-		boolean r = super.update(level);
+		byte r = super.update(level);
 
 		if ((state & State.JUMPING) != State.JUMPING && mode == FollowMode.JUMPING) {
 			mode = FollowMode.NORMAL;
 			goalPos = new Vector2f();
 		}
 
-		System.out.println(mode);
+		if ((mode == FollowMode.WALKING_TO_JUMP) && (r & MoveStatus.FAILED_X) == MoveStatus.FAILED_X
+				&& (r & MoveStatus.FAILED_Y) != MoveStatus.FAILED_Y) {
+			jump();
+		}
+
 		return r;
 	}
 
@@ -99,7 +103,7 @@ public class Follower extends Person {
 	}
 
 	@Override
-	protected void move(Vector2f displace, Level level) {
+	protected byte move(Vector2f displace, Level level) {
 		if (mode == FollowMode.NORMAL) {
 			float[] bounds = getTexBounds(walkCycle[0]);
 			int x = (int) Math.floor((pos.x + +displace.x + bounds[1]) / level.scale);
@@ -110,7 +114,7 @@ public class Follower extends Person {
 				state &= ~State.WALKING;
 			}
 		}
-		super.move(displace, level);
+		return (super.move(displace, level));
 	}
 
 }

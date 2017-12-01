@@ -22,11 +22,6 @@ public class Leader extends Person {
 	}
 
 	@Override
-	protected void move(Vector2f displacement, Level level) {
-		super.move(displacement, level);
-	}
-
-	@Override
 	public void jump() {
 		if ((state & State.JUMPING) != State.JUMPING) {
 			follower.issueJumpCommand(new Vector2f(pos));
@@ -35,8 +30,8 @@ public class Leader extends Person {
 	}
 
 	@Override
-	public boolean update(Level level) {
-		boolean r = super.update(level);
+	public byte update(Level level) {
+		byte r = super.update(level);
 		return r;
 	}
 

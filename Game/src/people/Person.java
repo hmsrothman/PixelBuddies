@@ -45,11 +45,10 @@ public abstract class Person {
 		currentTexture = walkCycle[0];
 	}
 
-	public boolean update(Level level) {
+	public byte update(Level level) {
 		frameCounter++;
 		handleFalling(level);
-		handleWalking(level);
-		return true;
+		return handleWalking(level);
 	}
 
 	public void jump() {
@@ -63,7 +62,9 @@ public abstract class Person {
 		batch.draw(destRect, uvRect, currentTexture.id, depth, color);
 	}
 
-	protected void move(Vector2f displace, Level level) {
+	protected byte move(Vector2f displace, Level level) {
+		byte out = 0;
+
 		float[] bounds = getTexBounds(walkCycle[0]);
 
 		int x1 = (int) Math.floor((pos.x + displace.x + bounds[0]) / level.scale);
@@ -91,6 +92,8 @@ public abstract class Person {
 			state &= ~State.JUMPING;
 			velocity.y = 0;
 			displace.y = 0;
+			out |= MoveStatus.FAILED_Y;
+
 			if (level.canWalk(cx1, y2) || level.canWalk(cx2, y2) || level.canWalk(cx3, y2)) {
 				state |= State.JUMPING;
 			}
@@ -101,8 +104,10 @@ public abstract class Person {
 				|| level.canWalk(x3, cy4)) {
 			velocity.x = 0;
 			displace.x = 0;
+			out |= MoveStatus.FAILED_X;
 		}
 		Vector2f.add(displace, pos, pos);
+		return out;
 	}
 
 	private void handleFalling(Level level) {
@@ -111,7 +116,8 @@ public abstract class Person {
 		destRect.y = pos.y;
 	}
 
-	private void handleWalking(Level level) {
+	private byte handleWalking(Level level) {
+		byte out = 0;
 		if ((state & State.LEFT) == State.LEFT) { // going right
 			uvRect.z = 1f;
 			speed.x = -width / height * 5 / 12;
@@ -121,7 +127,7 @@ public abstract class Person {
 		}
 
 		if ((state & State.WALKING) == State.WALKING) {
-			move(speed, level);
+			out = move(speed, level);
 			destRect.x = pos.x;
 			if (frameCounter >= 12) {
 				frameCounter = 0;
@@ -141,6 +147,7 @@ public abstract class Person {
 		if ((state & State.JUMPING) == State.JUMPING) {
 			currentTexture = jumpSprite;
 		}
+		return out;
 	}
 
 	protected float[] getTexBounds(Texture texture) {

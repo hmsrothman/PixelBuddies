@@ -64,7 +64,7 @@ public class Game extends MainGame {
 		glUniformMatrix4fv(loc, false, mat);
 		camera.setScale(0.5f);
 
-		simon = new Follower(new Vector2f(0, 1), "Simon");
+		simon = new Follower(new Vector2f(0, 1), "Katherine");
 		tracy = new Protagonist(new Vector2f(10, 1), "Tracy", simon, camera);
 
 		// kat = new Leader(new Vector2f(20, 0), "Kat");
@@ -83,9 +83,9 @@ public class Game extends MainGame {
 
 	@Override
 	protected void update() {
-		if (tracy.update(level)) {
+		tracy.update(level);
 			// camera.setPosition(new Vector2f(tracy.pos.x, camera.pos.y));
-		}
+		
 		simon.update(level);
 		// kat.update(level);
 		// katherine.update(level);
@@ -137,7 +137,7 @@ public class Game extends MainGame {
 
 		if (KeyboardInput.isKeyDown(GLFW_KEY_E)) {
 			tracy.play();
-		} else{
+		} else {
 			tracy.stopPlay();
 		}
 

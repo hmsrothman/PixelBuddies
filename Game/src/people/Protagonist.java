@@ -24,18 +24,19 @@ public class Protagonist extends Leader {
 	}
 
 	@Override
-	protected void move(Vector2f displacement, Level level) {
-		super.move(displacement, level);
+	protected byte move(Vector2f displacement, Level level) {
+		byte out = super.move(displacement, level);
 		if (displacement.x == 0 && displacement.y == 0) {
 
 		} else {
 			camera.setPosition(new Vector2f(pos.x, camera.pos.y));
 		}
+		return out;
 	}
 
 	@Override
-	public boolean update(Level level) {
-		boolean r = super.update(level);
+	public byte update(Level level) {
+		byte r = super.update(level);
 		handlePlaying();
 		return r;
 	}
