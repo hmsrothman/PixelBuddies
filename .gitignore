@@ -10,3 +10,7 @@ Engine/.settings/*
 Engine/Dependencies/*
 Engine/bin/*
 Game/bin/*
+LevelEditor/bin/*
+LevelEditor/.project/*
+LevelEditor/.classpath/*
+LevelEditor/.settings/*
