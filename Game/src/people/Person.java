@@ -1,7 +1,7 @@
 package people;
 
-import Engine.SpriteBatch;
-import Engine.Texture;
+import engine.SpriteBatch;
+import engine.Texture;
 import game.Level;
 import otherpeoplesmath.Vector2f;
 import otherpeoplesmath.Vector4f;

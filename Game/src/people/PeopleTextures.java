@@ -3,7 +3,7 @@ package people;
 import java.util.HashMap;
 import java.util.Map;
 
-import Engine.Texture;
+import engine.Texture;
 
 public class PeopleTextures {
 	private static class Tex {

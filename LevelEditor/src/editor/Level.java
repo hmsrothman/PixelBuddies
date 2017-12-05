@@ -2,21 +2,21 @@ package editor;
 
 import java.util.ArrayList;
 
-import Engine.SpriteBatch;
-import Engine.Texture;
+import engine.SpriteBatch;
+import engine.Texture;
 import otherpeoplesmath.Vector4f;
 
-public class Level {
-	class Tile {
-		int tex;
-		Vector4f rect;
+class Tile {
+	int tex;
+	Vector4f rect;
 
-		public Tile(int texture, Vector4f rectangle) {
-			tex = texture;
-			rect = rectangle;
-		}
+	public Tile(int texture, Vector4f rectangle) {
+		tex = texture;
+		rect = rectangle;
 	}
+}
 
+public class Level {
 	public float scale = 5 * 30 / 45f;
 	public int yoffset = 0;
 
@@ -34,8 +34,8 @@ public class Level {
 
 	public Level() {
 		setupLevel();
-
 		yoffset = 7;
+		fillTileArray();
 	}
 
 	public Level(String path) {
@@ -48,6 +48,32 @@ public class Level {
 				yoffset = y;
 			}
 		}
+		fillTileArray();
+	}
+
+	private void setupLevel() {
+		textures[0] = TileTextures.getTexture("Butts Tunnels Wall Texture.bmp");
+		textures[1] = TileTextures.getTexture("Lower Floor Texture.bmp");
+		textures[2] = TileTextures.getTexture("Floor Texture.bmp");
+		textures[3] = TileTextures.getTexture("FLOOR.bmp");
+
+		for (int x = 0; x < 200; x += scale * 6) {
+			for (float y = -scale * 4; y < 50; y += scale * 6) {
+				background.add(new Tile(textures[0].id, new Vector4f(x, y, scale * 6, scale * 6)));
+			}
+		}
+
+		for (float x = 0; x < 200; x += scale) {
+			grid.add(new Tile(0, new Vector4f(x - 0.1f, -20, 0.2f, 100)));
+		}
+
+		for (float y = -scale * 4; y < 50; y += scale) {
+			grid.add(new Tile(0, new Vector4f(0, y - 0.1f, 200, 0.2f)));
+		}
+	}
+
+	private void fillTileArray() {
+
 		for (int x = 0; x < levelData.length; x++) {
 			for (int y = 0; y < levelData[0].length; y++) {
 				if (levelData[x][y] != 0) {
@@ -57,27 +83,6 @@ public class Level {
 					}
 				}
 			}
-		}
-	}
-
-	public void setupLevel() {
-		textures[0] = new Texture("C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\Butts Tunnels Wall Texture 2.0.bmp");
-		textures[1] = new Texture("C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\Lower Floor Texture.bmp");
-		textures[2] = new Texture("C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\Floor Texture 2.0.bmp");
-		textures[3] = new Texture("C:\\Users\\Simon\\Code\\Java\\Game\\Assets\\FLOOR.bmp");
-
-		for (int x = 0; x < 200; x += scale * 6) {
-			for (float y = -scale * 4; y < 50; y += scale * 6) {
-				background.add(new Tile(textures[0].id, new Vector4f(x, y, scale * 6, scale * 6)));
-			}
-		}
-
-		for (float x = 0; x < 200; x += scale) {
-			grid.add(new Tile(0, new Vector4f(x, -20, 0.2f, 100)));
-		}
-
-		for (float y = -scale * 4; y < 50; y += scale) {
-			grid.add(new Tile(0, new Vector4f(0, y, 200, 0.2f)));
 		}
 	}
 

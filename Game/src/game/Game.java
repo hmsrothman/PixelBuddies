@@ -16,11 +16,11 @@ import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
 
-import Engine.Camera2D;
-import Engine.GLSLProgram;
-import Engine.KeyboardInput;
-import Engine.MainGame;
-import Engine.SpriteBatch;
+import engine.Camera2D;
+import engine.GLSLProgram;
+import engine.KeyboardInput;
+import engine.MainGame;
+import engine.SpriteBatch;
 import otherpeoplesmath.Matrix4f;
 import otherpeoplesmath.Vector2f;
 import people.Follower;

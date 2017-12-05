@@ -2,8 +2,8 @@ package game;
 
 import java.util.ArrayList;
 
-import Engine.SpriteBatch;
-import Engine.Texture;
+import engine.SpriteBatch;
+import engine.Texture;
 import otherpeoplesmath.Vector4f;
 
 public class Level {

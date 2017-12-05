@@ -1,7 +1,7 @@
 package people;
 
-import Engine.Camera2D;
-import Engine.Texture;
+import engine.Camera2D;
+import engine.Texture;
 import game.Level;
 import otherpeoplesmath.Vector2f;
 
